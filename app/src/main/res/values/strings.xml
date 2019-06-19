@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Country Code</string>
+    <string name="intro">Country Details</string>
+    <string name="title">Country Details</string>
 </resources>
