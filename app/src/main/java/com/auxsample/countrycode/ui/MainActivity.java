@@ -32,11 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progressDoalog = new ProgressDialog(MainActivity.this);
-        progressDoalog.setMessage("Loading....");
-        progressDoalog.show();
+        progressDialog();
 
-        /*Create handle for the RetrofitInstance interface*/
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<List<RetroCountry>> call = service.getAllDetail();
         call.enqueue(new Callback<List<RetroCountry>>() {
@@ -55,7 +52,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*Method to generate List of data using RecyclerView with custom adapter*/
+    private void progressDialog() {
+        progressDoalog = new ProgressDialog(MainActivity.this);
+        progressDoalog.setMessage("Loading....");
+        progressDoalog.show();
+    }
+
     private void generateDataList(List<RetroCountry> photoList) {
         rvCountryData = findViewById(R.id.rvCountryData);
         adapter = new CustomAdapter(this, photoList);

@@ -2,9 +2,6 @@ package com.auxsample.countrycode.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ahmadrosid.svgloader.SvgLoader;
 import com.auxsample.countrycode.R;
 import com.auxsample.countrycode.model.RetroCountry;
-import com.squareup.picasso.Picasso;
 
-import java.net.URL;
 import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
@@ -33,8 +28,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        public final View mView;
-
+        private final View mView;
         private TextView tvCountry;
         private TextView tvCode;
         private ImageView ivFlag;

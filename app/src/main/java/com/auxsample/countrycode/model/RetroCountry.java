@@ -12,7 +12,8 @@ public class RetroCountry {
     @SerializedName("callingCodes")
     private String callingCodes[];
 
-    public RetroCountry(String flag, String name, String callingCodes []) {
+    public RetroCountry(String flag, String name, String callingCodes[]) {
+
         this.flag = flag;
         this.name = name;
         this.callingCodes = callingCodes;
@@ -21,11 +22,9 @@ public class RetroCountry {
     public String getFlag() {
         return flag;
     }
-
     public String getName() {
         return name;
     }
-
     public String[] getCallingCodes() {
         return callingCodes;
     }
