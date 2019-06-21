@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Adapter;
 import android.widget.Toast;
 
@@ -15,8 +16,11 @@ import com.auxsample.countrycode.data.GetDataService;
 import com.auxsample.countrycode.model.RetroCountry;
 import com.auxsample.countrycode.network.RetrofitClientInstance;
 
+import org.reactivestreams.Subscription;
+
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
@@ -31,42 +35,55 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog progressDoalog;
     private RecyclerView rvCountryData;
     private RecyclerView.Adapter adapter;
+    private Subscription subscription;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         progressDialog();
 
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Observable<List<RetroCountry>> call = service.getAllDetail();
 
-        call.observeOn(Schedulers.io())
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        final Observable<List<RetroCountry>> call = service.getAllDetail();
+
+        call
+                .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResourceObserver<List<RetroCountry>>() {
-                    @Override
-                    public void onNext(List<RetroCountry> retroCountries) {
-                        progressDoalog.dismiss();
-                        generateDataList(retroCountries);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        progressDoalog.dismiss();
-                        Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                        System.out.println("Error" + e.getMessage());
-                    }
 
                     @Override
                     public void onComplete() {
 
+                        progressDoalog.dismiss();
+                        Log.d(TAG, "In onCompleted()");
+                    }
+
+                    @Override
+                    public void onNext(List<RetroCountry> retroCountries) {
+
+                        Log.d(TAG, "In onNext()");
+                        generateDataList(retroCountries);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        progressDoalog.dismiss();
+                        e.printStackTrace();
+                        Log.d(TAG, "In onError()");
                     }
                 });
     }
+
 
     private void progressDialog() {
         progressDoalog = new ProgressDialog(MainActivity.this);
@@ -74,12 +91,17 @@ public class MainActivity extends AppCompatActivity {
         progressDoalog.show();
     }
 
+
     private void generateDataList(List<RetroCountry> countryList) {
         rvCountryData = findViewById(R.id.rvCountryData);
         adapter = new CustomAdapter(this, countryList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         rvCountryData.setLayoutManager(layoutManager);
         rvCountryData.setAdapter(adapter);
+    }
+
+    private void showToast() {
+        Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
     }
 }
 
