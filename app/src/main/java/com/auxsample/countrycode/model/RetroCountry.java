@@ -2,6 +2,8 @@ package com.auxsample.countrycode.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import javax.inject.Inject;
+
 public class RetroCountry {
 
 
@@ -12,6 +14,7 @@ public class RetroCountry {
     @SerializedName("callingCodes")
     private String callingCodes[];
 
+    @Inject
     public RetroCountry(String flag, String name, String callingCodes[]) {
 
         this.flag = flag;

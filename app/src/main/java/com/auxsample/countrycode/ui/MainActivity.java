@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.auxsample.countrycode.R;
@@ -16,9 +15,9 @@ import com.auxsample.countrycode.data.GetDataService;
 import com.auxsample.countrycode.model.RetroCountry;
 import com.auxsample.countrycode.network.RetrofitClientInstance;
 
-import org.reactivestreams.Subscription;
-
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDoalog;
     private RecyclerView rvCountryData;
     private RecyclerView.Adapter adapter;
-    private Subscription subscription;
 
 
     @Override
@@ -50,13 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
         progressDialog();
 
-
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         final Observable<List<RetroCountry>> call = service.getAllDetail();
 
         call
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new ResourceObserver<List<RetroCountry>>() {
 
                     @Override
@@ -69,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(List<RetroCountry> retroCountries) {
 
+                        System.out.println("OnNext...");
                         Log.d(TAG, "In onNext()");
                         generateDataList(retroCountries);
 

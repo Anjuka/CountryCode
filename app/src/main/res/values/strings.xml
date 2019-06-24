@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Country Code</string>
+
+    <!--Splash Screen -->     
     <string name="intro">Country Details</string>
+
+    <!--Main Screen -->
     <string name="title">Country Details</string>
 </resources>
